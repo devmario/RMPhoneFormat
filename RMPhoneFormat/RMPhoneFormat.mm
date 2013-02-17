@@ -860,7 +860,7 @@ static NSMutableDictionary *flagRules = nil;
     if (res == nil) {
         NSNumber *num = [_callingCodeOffsets objectForKey:callingCode];
         if (num) {
-            const uint8_t *bytes = [_data bytes];
+            const uint8_t *bytes = (const uint8_t *)[_data bytes];
             uint32_t start = [num longValue];
             uint32_t offset = start;
             res = [[CallingCodeInfo alloc] init];
@@ -1064,9 +1064,9 @@ static NSMutableDictionary *flagRules = nil;
     const void *bytes = [_data bytes];
     NSUInteger spot = 4;
     for (int i = 0; i < count; i++) {
-        NSString *callingCode = [NSString stringWithCString:bytes + spot encoding:NSUTF8StringEncoding];
+        NSString *callingCode = [NSString stringWithCString:(const char*)((int*)bytes + spot) encoding:NSUTF8StringEncoding];
         spot += 4;
-        NSString *country = [NSString stringWithCString:bytes + spot encoding:NSUTF8StringEncoding];
+        NSString *country = [NSString stringWithCString:(const char*)((int*)bytes + spot) encoding:NSUTF8StringEncoding];
         spot += 4;
         uint32_t offset = [self value32:spot] + base;
         spot += 4;
